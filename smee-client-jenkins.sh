@@ -13,7 +13,7 @@ curl -s -N -H "Accept: text/event-stream" "$SMEE_URL" | while read -r LINE; do
     BODY="$(jq .body /tmp/smee-data)"
     if [[ $EVENT_KEY != "null" ]] || [[ $BODY != "null" ]]; then
       echo curl -X POST "$JENKINS_URL" -H "Content-Type: application/json" -H "x-event-key: $EVENT_KEY" -d "$BODY"
-      curl -X POST "$JENKINS_URL" -H "Content-Type: application/json" -H "x-event-key: $EVENT_KEY" -d "$BODY"
+      curl -s -X POST "$JENKINS_URL" -H "Content-Type: application/json" -H "x-event-key: $EVENT_KEY" -d "$BODY"
       echo
     fi
   fi
