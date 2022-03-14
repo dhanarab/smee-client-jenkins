@@ -12,8 +12,8 @@ curl -s -N -H "Accept: text/event-stream" "$SMEE_URL" | while read -r LINE; do
     EVENT_KEY=$(jq -r .\"x-event-key\" /tmp/smee-data)
     BODY="$(jq .body /tmp/smee-data)"
     if [[ $EVENT_KEY != "null" ]] || [[ $BODY != "null" ]]; then
-      echo curl -X POST "$JENKINS_URL" -H "Content-Type: application/json" -H "x-event-key: $EVENT_KEY" -d "$BODY"
-      curl -s -X POST "$JENKINS_URL" -H "Content-Type: application/json" -H "x-event-key: $EVENT_KEY" -d "$BODY"
+      echo curl -s --retry 3 --retry-delay 0 --connect-timeout 10 --max-time 30 -X POST "$JENKINS_URL" -H "Content-Type: application/json" -H "x-event-key: $EVENT_KEY" -d "$BODY"
+      curl -s --retry 3 --retry-delay 0 --connect-timeout 10 --max-time 30 -X POST "$JENKINS_URL" -H "Content-Type: application/json" -H "x-event-key: $EVENT_KEY" -d "$BODY"
       echo
     fi
   fi
